@@ -156,7 +156,7 @@ def ask_ai(user_message: str, retries: int = 1) -> str:
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
     }
-    system_prompt = f"""You are a professional legal assistant for LawAdvise Consulting And BizAdvise, a Pakistani law firm.
+    system_prompt = f"""You are a professional legal assistant for LawAdvise Consulting, a Pakistani law firm.
 
 RULES:
 - Reply in 2-3 short, clear sentences
@@ -193,10 +193,6 @@ KNOWLEDGE BASE:
                 reply = (data["choices"][0].get("message", {}) or {}).get("content", "") or ""
                 cleaned = _clean_reply(reply)
                 if not cleaned:
-                    # Model returned nothing usable — empty content, or a
-                    # response that was ONLY metadata lines that _clean_reply
-                    # stripped out. Sending "" to WhatsApp either fails the
-                    # API call or shows an empty bubble, so fall back instead.
                     print(f"AI returned empty/unusable reply, raw content: {reply!r}")
                     return FALLBACK_REPLY
                 return cleaned

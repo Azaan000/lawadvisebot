@@ -395,7 +395,7 @@ export default function App() {
       {/* Top bar */}
       <div style={barStyle}>
         <span className="brandTitleShimmer" style={{ fontSize: 16, fontWeight: 700, letterSpacing: 0.3 }}>
-          BizAdvise & LawAdvise
+          LawAdvise Consulting
         </span>
         <div style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
           <button style={btnStyle("#fff", "var(--color-navy)")} onClick={async () => { await refreshAnalytics(); setShowAnalytics(true); }}>

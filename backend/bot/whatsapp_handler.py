@@ -77,24 +77,12 @@ def send_main_menu(to: str):
             "type": "interactive",
             "interactive": {
                 "type": "list",
-                "header": {"type": "text", "text": "BizAdvise & LawAdvise Consulting"},
+                "header": {"type": "text", "text": "LawAdvise Consulting"},
                 "body": {"text": "Welcome! How can we assist you today? Please select a service:"},
-                "footer": {"text": "Our experts are here to help you."},
+                "footer": {"text": "Our legal team is here to help you."},
                 "action": {
                     "button": "View Services",
                     "sections": [
-                        {
-                            "title": "BizAdvise Services",
-                            "rows": [
-                                {"id": "biz_business", "title": "Business Consultancy",    "description": "Register your business / company"},
-                                {"id": "biz_ngo",      "title": "NGO / Charity",           "description": "Start a charity or NGO"},
-                                {"id": "biz_tax",      "title": "Taxation Services",        "description": "NTN, income tax, sales tax"},
-                                {"id": "biz_accounts", "title": "Accountancy",              "description": "Bookkeeping, audits, reports"},
-                                {"id": "biz_legal",    "title": "Corporate Legal",          "description": "Contracts, compliance, opinions"},
-                                {"id": "biz_digital",  "title": "Digital Marketing",        "description": "SEO, ads, website, social media"},
-                                {"id": "biz_urgent",   "title": "Urgent Help",              "description": "FBR notice, SECP, tax deadline"},
-                            ]
-                        },
                         {
                             "title": "LawAdvise Services",
                             "rows": [
@@ -102,7 +90,11 @@ def send_main_menu(to: str):
                                 {"id": "court_marriage", "title": "Court Marriage",          "description": "Court marriage process"},
                                 {"id": "divorce_khula",  "title": "Divorce / Khula",        "description": "Divorce and Khula guidance"},
                                 {"id": "child_custody",  "title": "Child Custody",          "description": "Custody and guardianship"},
+                                {"id": "maintenance",    "title": "Maintenance / Dowery",   "description": "Nafaqa and dowery guidance"},
+                                {"id": "property_law",   "title": "Property Law",           "description": "Property legal consultation"},
+                                {"id": "inheritance",    "title": "Inheritance",            "description": "Inheritance legal consultation"},
                                 {"id": "legal_docs",     "title": "Legal Documentation",    "description": "Document drafting"},
+                                {"id": "corporate_law",  "title": "Corporate Law",          "description": "Corporate legal consultation"},
                                 {"id": "contact_us",     "title": "Talk to an Expert",      "description": "Speak with our team directly"},
                             ]
                         }

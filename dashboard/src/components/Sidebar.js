@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { api } from "../api/client";
 import s from "../styles/Sidebar.module.css";
-import bizLogo from "../assets/logos/bizadvise-logo.png";
 import lawLogo from "../assets/logos/lawadvise-logo.png";
 
 function getInitials(name, phone) {
@@ -62,11 +61,9 @@ export default function Sidebar({
   return (
     <aside className={s.sidebar}>
 
-      {/* Brand header — both logos, premium navy/gold treatment */}
+      {/* Brand header — LawAdvise logo, premium navy/gold treatment */}
       <div className={s.brandHeader}>
-        <img src={bizLogo} alt="BizAdvise Consulting" className={s.brandLogo} />
-        <span className={s.brandDivider} />
-        <img src={lawLogo} alt="LawAdvise Consulting" className={`${s.brandLogo} ${s.brandLogoSecond}`} />
+        <img src={lawLogo} alt="LawAdvise Consulting" className={s.brandLogo} />
       </div>
 
       {/* Header */}
