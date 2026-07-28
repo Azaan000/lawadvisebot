@@ -1,0 +1,281 @@
+.chat { flex: 1; display: flex; flex-direction: column; background: #f0f2f5; overflow: hidden; }
+
+/* ── Empty state ── */
+.empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: #f8f9ff; padding: 40px; }
+.emptyIllustration { margin-bottom: 8px; }
+.emptyTitle { font-size: 18px; font-weight: 600; color: #333; }
+.emptySubtitle { font-size: 14px; color: #666; text-align: center; }
+.emptyHint { font-size: 12px; color: #aaa; text-align: center; margin-top: 4px; }
+
+/* ── Header ── */
+.header { padding: 12px 18px; background: #fff; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; gap: 12px; }
+.headerLeft { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
+.headerAvatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 15px; font-weight: 700; flex-shrink: 0; transition: background 0.3s; }
+.headerName { font-size: 15px; font-weight: 600; color: #111; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.headerPhone { font-size: 11px; color: #aaa; font-weight: 400; }
+.headerMeta { display: flex; gap: 8px; align-items: center; margin-top: 3px; flex-wrap: wrap; }
+.modePill { display: flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; transition: background 0.3s, color 0.3s; }
+.modePillDot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; transition: background 0.3s; }
+.tagBadge { background: #e3f2fd; padding: 2px 8px; border-radius: 12px; font-size: 11px; color: #0b5cff; }
+.msgCount { font-size: 11px; color: #aaa; }
+
+/* ── Action buttons with label underneath ── */
+.headerActions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+.actionBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  min-width: 54px;
+}
+.actionBtn:hover {
+  background: color-mix(in srgb, var(--btn-color) 10%, transparent);
+  border-color: color-mix(in srgb, var(--btn-color) 30%, transparent);
+  transform: translateY(-1px);
+}
+.actionBtn:active { transform: translateY(0); }
+
+.actionBtnIcon {
+  font-size: 20px;
+  line-height: 1;
+  display: block;
+}
+
+.actionBtnLabel {
+  font-size: 10px;
+  font-weight: 500;
+  color: #aaa;
+  white-space: nowrap;
+  transition: color 0.15s;
+  line-height: 1;
+}
+.actionBtn:hover .actionBtnLabel {
+  color: var(--btn-color);
+}
+.actionBtnLabelVisible {
+  color: var(--btn-color) !important;
+}
+
+/* ── Search ── */
+.searchBar { padding: 8px 18px; background: #fff; border-bottom: 1px solid #e0e0e0; position: relative; flex-shrink: 0; }
+.searchInput { width: 100%; padding: 7px 36px 7px 12px; border-radius: 20px; border: 1px solid #ddd; outline: none; font-size: 13px; box-sizing: border-box; }
+.searchInput:focus { border-color: #0b5cff; }
+.clearBtn { position: absolute; right: 26px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #999; font-size: 14px; }
+
+/* ── Messages ── */
+.messages { flex: 1; padding: 16px 20px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; background: #efeae2; }
+.loading { text-align: center; color: #666; padding: 20px; }
+.noMessages { text-align: center; color: #999; padding: 40px; font-size: 13px; }
+
+/* Date separator */
+.dateSep { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+.dateSepLine { flex: 1; height: 1px; background: rgba(0,0,0,0.1); }
+.dateSepLabel { font-size: 11px; font-weight: 600; color: #666; background: #e2ddd5; padding: 3px 10px; border-radius: 10px; white-space: nowrap; }
+
+/* ── Bubble wrapper — fixes time alignment ── */
+.bubbleWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+.bubbleWrapUser { align-items: flex-start; }
+.bubbleWrapBot  { align-items: flex-end; }
+
+.bubble {
+  padding: 8px 12px;
+  border-radius: 12px;
+  max-width: 60%;
+  font-size: 14px;
+  word-wrap: break-word;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.08);
+}
+.bubbleUser { background: #e4e6eb; color: #000; border-bottom-left-radius: 4px; }
+.bubbleBot  { background: #0b5cff; color: #fff; border-bottom-right-radius: 4px; }
+.bubbleBody { display: flex; gap: 6px; align-items: flex-start; flex-wrap: wrap; }
+.typeIcon { flex-shrink: 0; }
+.fileName { font-size: 11px; opacity: 0.75; font-style: italic; }
+
+/* Time always sits below the bubble — consistent regardless of text length */
+.bubbleTime {
+  font-size: 10px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 4px;
+}
+.bubbleTimeUser { align-self: flex-start; }
+.bubbleTimeBot  { align-self: flex-end; }
+
+/* ── Fade-in animation ── */
+@keyframes bubbleFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.bubbleNew { animation: bubbleFadeIn 0.2s ease-out forwards; }
+
+/* ── Typing bubble — left side (user is typing) ── */
+/* This represents OUR (bot/business) side composing a reply — right-
+   aligned and blue like .bubbleBot, not left/gray like the customer's
+   own bubbles, so it reads as "we're about to reply" not "customer is
+   typing something else". */
+.typingBubbleWrap { align-self: flex-end; background: #0b5cff; border-radius: 18px; border-bottom-right-radius: 4px; padding: 10px 16px; display: flex; align-items: center; gap: 4px; box-shadow: 0 1px 1px rgba(0,0,0,0.08); max-width: 80px; margin-bottom: 6px; }
+.typingDots { display: flex; align-items: center; gap: 4px; }
+.dot { width: 8px; height: 8px; background: rgba(255,255,255,0.85); border-radius: 50%; animation: typingBounce 1s infinite ease-in-out; }
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30%            { transform: translateY(-6px); opacity: 1; }
+}
+
+/* ── Input area ── */
+.inputArea { display: flex; padding: 10px 16px; background: #fff; border-top: 1px solid #ddd; gap: 8px; align-items: center; flex-shrink: 0; }
+.fileInputHidden { display: none; }
+.attachBtn { width: 36px; height: 36px; border-radius: 50%; border: none; background: transparent; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; line-height: 1; }
+.attachBtn:hover { background: #f0f0f0; }
+.filePreview { flex: 1; display: flex; align-items: center; gap: 8px; background: #f5f5f5; border-radius: 20px; padding: 6px 12px; min-width: 0; }
+.filePreviewName { flex: 1; font-size: 12px; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.filePreviewSend { padding: 4px 12px; background: #0b5cff; color: #fff; border: none; border-radius: 14px; cursor: pointer; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+.filePreviewSend:disabled { opacity: 0.5; cursor: not-allowed; }
+.filePreviewCancel { background: none; border: none; cursor: pointer; color: #999; font-size: 14px; padding: 0; flex-shrink: 0; }
+.textInput { flex: 1; padding: 10px 15px; border-radius: 20px; border: 1px solid #ddd; outline: none; font-size: 14px; }
+.textInput:focus { border-color: #0b5cff; }
+.sendBtn { padding: 10px 20px; background: #0b5cff; color: #fff; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: 500; flex-shrink: 0; }
+.sendBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+/* ── Media bubbles ── */
+.bubbleMedia { padding: 6px; background: transparent !important; box-shadow: none !important; }
+.bubbleMedia.bubbleUser { background: transparent !important; }
+.bubbleMedia.bubbleBot  { background: transparent !important; }
+
+/* Image */
+.imageBubble {
+  position: relative;
+  cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 240px;
+  display: block;
+}
+.inlineImage {
+  width: 100%;
+  max-width: 240px;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: background 0.2s;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.imageBubble:hover .imageOverlay { opacity: 1; background: rgba(0,0,0,0.35); }
+.fileCaption { font-size: 12px; color: #555; margin-top: 4px; }
+
+/* Download button */
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 4px 10px;
+  background: #e3f2fd;
+  color: #0b5cff;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.downloadBtn:hover { background: #bbdefb; }
+
+/* Audio */
+.audioBubble { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.audioPlayer { height: 32px; max-width: 200px; }
+
+/* Document */
+.docBubble {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-width: 180px;
+  max-width: 240px;
+}
+.docIcon { font-size: 24px; flex-shrink: 0; }
+.docInfo { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.docName { font-size: 12px; font-weight: 600; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.docType { font-size: 10px; color: #999; text-transform: uppercase; }
+.docDownload {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: #0b5cff; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; font-size: 14px; flex-shrink: 0;
+}
+.docDownload:hover { background: #0044cc; }
+
+/* Lightbox */
+.lightbox {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 3000;
+  cursor: pointer;
+}
+.lightboxInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: default;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+.lightboxClose {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+}
+.lightboxImg {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 8px;
+  object-fit: contain;
+}
+.lightboxDownload {
+  padding: 8px 20px;
+  background: #0b5cff;
+  color: #fff;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+}
+.lightboxDownload:hover { background: #0044cc; }

@@ -1,0 +1,297 @@
+# WhatsApp AI Bot Dashboard
+
+A full-stack WhatsApp business bot with a real-time dashboard. Built with Python (Flask) on the backend and React on the frontend, using the WhatsApp Cloud API and OpenRouter for AI replies.
+
+---
+
+## Features
+
+- Real-time chat dashboard with live WebSocket updates
+- AI auto-replies powered by OpenRouter (any model)
+- Human / AI mode toggle per user
+- Broadcast messages to all users
+- File and media sending
+- Contact name display
+- Unread message badges
+- Message search
+- User tags and notes
+- Analytics dashboard (daily activity, top users, response time)
+- Export conversations to CSV
+- Knowledge base for AI context
+- Duplicate message prevention
+
+---
+
+## Project Structure
+
+```
+whatsappbot/
+├── app.py                      # Entry point — registers blueprints
+├── requirements.txt
+├── .env                        # Your secrets (never commit this)
+├── .env.example                # Template for env variables
+├── knowledge.txt               # AI context — edit with your business info
+├── database.db                 # SQLite database (auto-created)
+│
+├── bot/
+│   ├── ai_client.py            # OpenRouter AI integration
+│   └── whatsapp_handler.py     # WhatsApp Cloud API — send text and media
+│
+├── models/
+│   ├── database.py             # DB connection and init
+│   ├── user.py                 # User CRUD operations
+│   └── message.py              # Message CRUD operations
+│
+├── routes/
+│   ├── webhook.py              # WhatsApp webhook — verify + receive messages
+│   ├── chat.py                 # API routes — users, messages, send, export
+│   └── analytics.py            # Analytics and knowledge reload
+│
+├── utils/
+│   └── auth.py                 # Dashboard auth decorator
+│
+├── media_files/                # Uploaded media (auto-created)
+│
+└── dashboard/                  # React frontend
+    ├── public/
+    │   └── index.html
+    ├── .env                    # Frontend secrets (never commit this)
+    ├── .env.example
+    ├── package.json
+    └── src/
+        ├── App.js              # Root component
+        ├── index.js            # React DOM entry
+        ├── api/
+        │   └── client.js       # All API fetch calls
+        ├── hooks/
+        │   ├── useSocket.js    # WebSocket lifecycle
+        │   └── useMessages.js  # Message state and unread tracking
+        ├── components/
+        │   ├── Sidebar.js          # User list
+        │   ├── ChatArea.js         # Chat window
+        │   ├── BroadcastModal.js   # Broadcast feature
+        │   ├── AnalyticsModal.js   # Analytics dashboard
+        │   └── EditUserModal.js    # Edit user tags and notes
+        └── styles/
+            ├── global.css
+            ├── Sidebar.module.css
+            ├── ChatArea.module.css
+            ├── Modal.module.css
+            └── Analytics.module.css
+```
+
+---
+
+## Requirements
+
+### Backend
+- Python 3.9+
+- Flask
+- flask-cors
+- flask-socketio
+- python-dotenv
+- requests
+- werkzeug
+
+### Frontend
+- Node.js 16+
+- React 18
+- socket.io-client
+
+---
+
+## Setup
+
+### 1. Clone the project
+
+```bash
+git clone <your-repo>
+cd whatsappbot
+```
+
+### 2. Backend setup
+
+```bash
+# Create virtual environment (recommended)
+python -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # Mac/Linux
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Copy env file and fill in your keys
+cp .env.example .env
+```
+
+### 3. Frontend setup
+
+```bash
+cd dashboard
+cp .env.example .env
+npm install
+```
+
+---
+
+## Environment Variables
+
+### Backend `.env`
+
+```
+SECRET_KEY=your-long-random-secret-key
+DASHBOARD_SECRET=your-dashboard-token
+
+VERIFY_TOKEN=your-whatsapp-verify-token
+WHATSAPP_TOKEN=your-whatsapp-bearer-token
+PHONE_NUMBER_ID=your-phone-number-id
+
+OPENROUTER_API_KEY=your-openrouter-key
+AI_MODEL=meta-llama/llama-3-8b-instruct:free
+
+ALLOWED_ORIGINS=http://localhost:3000
+FLASK_DEBUG=false
+```
+
+### Frontend `dashboard/.env`
+
+```
+REACT_APP_API_URL=http://localhost:5000
+REACT_APP_DASHBOARD_SECRET=your-dashboard-token
+```
+
+> `DASHBOARD_SECRET` and `REACT_APP_DASHBOARD_SECRET` must be the same value.
+
+---
+
+## Running the App
+
+### Start backend
+
+```bash
+# From the whatsappbot/ root
+python app.py
+```
+
+Server runs on `http://localhost:5000`
+
+### Start frontend
+
+```bash
+cd dashboard
+npm start
+```
+
+Dashboard runs on `http://localhost:3000`
+
+---
+
+## WhatsApp + ngrok Setup
+
+### 1. Start ngrok
+
+```bash
+ngrok http 5000
+```
+
+Copy the `https://` URL — it changes every restart unless you have a paid static domain.
+
+### 2. Meta Developer Dashboard
+
+- Go to [developers.facebook.com](https://developers.facebook.com)
+- Open your app → **WhatsApp** → **Configuration**
+- Set **Callback URL** to: `https://your-ngrok-url.ngrok-free.app/webhook`
+- Set **Verify Token** to match `VERIFY_TOKEN` in your `.env`
+- Subscribe to webhook fields: `messages`, `message_deliveries`, `message_reads`
+
+### 3. Get your WhatsApp token
+
+- Go to **WhatsApp** → **API Setup**
+- Copy the temporary access token (expires every 24 hours)
+- For production: go to **Business Settings** → **System Users** → generate a permanent token with `whatsapp_business_messaging` permission
+
+### 4. Verify
+
+Hit this in your browser to confirm everything is connected:
+```
+https://your-ngrok-url.ngrok-free.app/health
+```
+
+---
+
+## Knowledge Base
+
+Edit `knowledge.txt` in the backend root with your business information:
+
+```
+Business name: My Shop
+Hours: 9am - 6pm Monday to Friday
+Location: Karachi, Pakistan
+Products: Shirts, Pants, Shoes
+Delivery: 2-3 business days
+Returns: Within 7 days with receipt
+
+Q: What is your return policy?
+A: We accept returns within 7 days with receipt.
+```
+
+After editing, reload without restarting:
+```
+POST http://localhost:5000/reload-knowledge
+```
+
+Or click **Reload knowledge** in the dashboard top bar.
+
+---
+
+## Dashboard Features
+
+| Feature | How to use |
+|---|---|
+| Switch AI / Human | Click the toggle button in the chat header |
+| Broadcast | Click Broadcast in the top bar |
+| Export chat | Click Export in the chat header |
+| Export all | Click Export all conversations in the sidebar |
+| Edit user | Click Edit in the chat header — add tags and notes |
+| Analytics | Click Analytics in the top bar |
+| Search messages | Use the search bar inside any chat |
+| Reload knowledge | Click Reload knowledge in the top bar |
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/health` | Server status |
+| GET | `/webhook` | WhatsApp webhook verify |
+| POST | `/webhook` | Incoming WhatsApp messages |
+| GET | `/users` | All users |
+| GET | `/messages/<phone>` | Messages for a user |
+| POST | `/send` | Send a text message |
+| POST | `/send-file` | Send a file |
+| POST | `/toggle/<phone>` | Toggle AI/Human mode |
+| POST | `/update-user` | Update user tags and notes |
+| GET | `/analytics` | Analytics data |
+| GET | `/export/csv` | Export all conversations |
+| GET | `/export/csv?phone=X` | Export one conversation |
+| POST | `/reload-knowledge` | Reload knowledge.txt |
+
+---
+
+## Human vs AI Mode
+
+- **AI mode** (default) — bot reads the message and replies automatically using OpenRouter
+- **Human mode** — bot is silent, you reply manually from the dashboard
+
+Toggle per user using the **Switch to Human / Switch to AI** button in the chat header.
+
+---
+
+## Notes
+
+- The SQLite database is created automatically on first run
+- Media files sent from the dashboard are uploaded to WhatsApp and then deleted locally
+- The `_processed_ids` set prevents duplicate webhook calls from Meta being handled twice
+- The dashboard secret (`X-Dashboard-Token` header) protects all API routes
+- Never commit your `.env` files — only commit `.env.example`

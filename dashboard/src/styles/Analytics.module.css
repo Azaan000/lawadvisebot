@@ -1,0 +1,30 @@
+/* Analytics.module.css */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 18px; border-radius: 12px; text-align: center; color: #fff; }
+.cardValue { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+.cardLabel { font-size: 12px; opacity: 0.9; }
+
+.section { margin-bottom: 22px; padding: 14px; background: #f8f9fa; border-radius: 12px; }
+.section h3 { margin: 0 0 12px; font-size: 14px; color: #333; }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.statBox { text-align: center; padding: 14px; background: #fff; border-radius: 8px; }
+.statNum { font-size: 24px; font-weight: 700; color: #333; }
+.statLabel { font-size: 12px; color: #666; margin-bottom: 8px; }
+.bar { height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; }
+.barFill { height: 100%; transition: width 0.3s; }
+
+.chartRow { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.chartDate { width: 90px; font-size: 11px; color: #666; flex-shrink: 0; }
+.chartTrack { flex: 1; position: relative; height: 28px; background: #e0e0e0; border-radius: 14px; overflow: hidden; }
+.chartFill { height: 100%; background: #0b5cff; border-radius: 14px; transition: width 0.3s; }
+.chartVal { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; color: #333; font-weight: 600; }
+
+.topRow { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #fff; border-radius: 8px; margin-bottom: 6px; }
+.rank { font-size: 16px; font-weight: 700; color: #0b5cff; width: 36px; }
+.topPhone { flex: 1; font-size: 13px; font-weight: 500; }
+.topMsgs { font-size: 12px; color: #666; }
+
+.qItem { padding: 10px 12px; background: #fff; border-radius: 8px; margin-bottom: 6px; }
+.qText { font-size: 13px; color: #333; margin-bottom: 4px; }
+.qCount { font-size: 11px; color: #0b5cff; }

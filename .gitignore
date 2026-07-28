@@ -1,0 +1,27 @@
+# Environment files
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.env/
+
+# Node modules
+node_modules/
+
+# Database
+*.db
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# Build folders
+dist/
+build/
