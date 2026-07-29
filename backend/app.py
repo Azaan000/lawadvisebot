@@ -22,6 +22,11 @@ BACKUP_DIR = os.getenv("BACKUP_DIR", "backups")
 BACKUP_RETENTION_DAYS = int(os.getenv("BACKUP_RETENTION_DAYS", "14"))
 
 app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "APP VERSION 1"
+
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "change-me-in-production")
 app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
 
