@@ -6,7 +6,7 @@ import requests
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
 PHONE_NUMBER_ID = os.getenv("PHONE_NUMBER_ID")
 WA_BASE = "https://graph.facebook.com/v18.0"
-MEDIA_FOLDER = "media_files"
+MEDIA_FOLDER = os.getenv("MEDIA_FOLDER", "media_files")
 
 # Shared socketio reference set by app.py after init
 _socketio = None

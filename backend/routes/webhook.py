@@ -44,7 +44,7 @@ _contact_collection = {}   # phone -> {"step": "awaiting_name"/"awaiting_mobile"
 _user_context = {}         # phone -> "main" once a consultation flow completes (kept for future use)
 
 CONTACT = "03003029093 / 03332454111"
-MEDIA_FOLDER = "media_files"
+MEDIA_FOLDER = os.getenv("MEDIA_FOLDER", "media_files")
 
 # Marker phrase embedded in every choice-gated prompt below — used to
 # detect "this message just asked the customer to choose between a

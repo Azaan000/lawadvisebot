@@ -18,7 +18,7 @@ _START_TIME = _time.time()
 
 chat_bp = Blueprint("chat", __name__)
 
-MEDIA_FOLDER = "media_files"
+MEDIA_FOLDER = os.getenv("MEDIA_FOLDER", "media_files")
 os.makedirs(MEDIA_FOLDER, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {

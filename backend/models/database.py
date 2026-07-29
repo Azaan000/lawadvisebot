@@ -1,8 +1,8 @@
+import os
 import sqlite3
 from datetime import datetime
 
-DB_PATH = "database.db"
-
+DB_PATH = os.getenv("DB_PATH", "database.db")
 
 def get_db():
     conn = sqlite3.connect(DB_PATH, check_same_thread=False, timeout=10)
