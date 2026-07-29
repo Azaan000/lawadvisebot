@@ -5,4 +5,4 @@ python-dotenv>=1.0
 requests>=2.31
 werkzeug>=3.0
 gunicorn>=21.2
-eventlet>=0.35
+gevent>=24.2.1
