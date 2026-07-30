@@ -1,19 +1,43 @@
 {
-    "name": "whatsapp-dashboard",
-    "version": "1.0.0",
-    "private": true,
-    "dependencies": {
-      "react": "^18.2.0",
-      "react-dom": "^18.2.0",
-      "react-scripts": "5.0.1",
-      "socket.io-client": "^4.7.2"
-    },
-    "scripts": {
-      "start": "react-scripts start",
-      "build": "react-scripts build"
-    },
-    "browserslist": {
-      "production": [">0.2%", "not dead", "not op_mini all"],
-      "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+  "name": "lawdavise",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": ".",
+  "main": "build/electron.js",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "socket.io-client": "^4.7.2"
+  },
+  "devDependencies": {
+    "electron": "^43.2.0",
+    "electron-builder": "^26.15.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "electron": "electron .",
+    "dist": "electron-builder"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "build": {
+    "appId": "com.lawdavise.dashboard",
+    "productName": "LawDavise Dashboard",
+    "win": {
+      "target": "portable",
+      "icon": "build-assets/icon.png"
     }
   }
+}

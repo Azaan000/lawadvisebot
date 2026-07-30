@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from models.database import get_db
 
 
@@ -9,7 +9,8 @@ def save_user(phone, socketio, name=""):
         cursor.execute("SELECT phone FROM users WHERE phone=?", (phone,))
         is_new = cursor.fetchone() is None
 
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # Explicit UTC with a 'Z' suffix — see models/message.py for why.
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         cursor.execute(
             "INSERT OR IGNORE INTO users (phone, name, first_seen, last_seen) VALUES (?, ?, ?, ?)",
             (phone, name, now, now),

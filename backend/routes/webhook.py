@@ -7,7 +7,7 @@ import re
 from collections import deque
 import requests as http_requests
 import mimetypes as mt
-from datetime import datetime
+from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor
 from flask import Blueprint, request, current_app
 
@@ -652,7 +652,8 @@ def _handle_contact_collection(phone, text, socketio):
             "name": name,
             "mobile": mobile,
             "best_time": best_time,
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            # Explicit UTC with a 'Z' suffix — see models/message.py for why.
+            "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         })
         log.info(f"Consultation booked: {name} ({mobile}) — best time: {best_time}")
 

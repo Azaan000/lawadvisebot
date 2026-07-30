@@ -2,7 +2,7 @@ import os
 import csv
 import time as _time
 import urllib.parse
-from datetime import datetime
+from datetime import datetime, timezone
 from io import StringIO, BytesIO
 
 from flask import Blueprint, request, jsonify, send_file, current_app
@@ -230,6 +230,7 @@ def health():
         "whatsapp_configured": bool(os.getenv("WHATSAPP_TOKEN")),
         "openrouter_configured": bool(os.getenv("OPENROUTER_API_KEY")),
         "uptime_seconds": round(_time.time() - _START_TIME),
-        "timestamp": datetime.now().isoformat(),
+        # Explicit UTC with a 'Z' suffix — see models/message.py for why.
+        "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
     return jsonify(payload), (200 if db_ok else 503)

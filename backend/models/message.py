@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from models.database import get_db
 from utils.logger import get_logger
 
@@ -20,7 +20,12 @@ def save_message(
     conn = get_db()
     cursor = conn.cursor()
     try:
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # Explicit UTC with a 'Z' suffix — so the dashboard's `new Date(...)`
+        # parses this as UTC and converts it to each viewer's local time
+        # zone, instead of silently treating a bare timestamp as if it
+        # were already local (which is what caused messages to display
+        # several hours off from the viewer's actual clock).
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         cursor.execute(
             """INSERT INTO messages
                (phone, message, direction, status, timestamp,
