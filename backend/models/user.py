@@ -101,11 +101,22 @@ def get_all_users():
     conn = get_db()
     cursor = conn.cursor()
     try:
+        # unread_count is computed from the messages table itself (how
+        # many incoming customer messages have an id greater than the
+        # last one this user's chat was marked read up to) rather than
+        # kept as a separately-incremented counter — that way it's
+        # always consistent with the actual message log, and correctly
+        # reflects messages that arrived while the dashboard was closed
+        # (which an in-memory-only counter in the frontend can't see).
         cursor.execute("""
-            SELECT phone, name, human_mode, tags, notes,
-                   total_messages, first_seen, last_seen, last_message
-            FROM users
-            ORDER BY last_seen DESC
+            SELECT u.phone, u.name, u.human_mode, u.tags, u.notes,
+                   u.total_messages, u.first_seen, u.last_seen, u.last_message,
+                   (SELECT COUNT(*) FROM messages m
+                    WHERE m.phone = u.phone
+                      AND m.direction = 'user'
+                      AND m.id > u.last_read_message_id) AS unread_count
+            FROM users u
+            ORDER BY u.last_seen DESC
         """)
         rows = cursor.fetchall()
         return [
@@ -119,11 +130,44 @@ def get_all_users():
                 "first_seen": r["first_seen"] or "",
                 "last_seen": r["last_seen"],
                 "last": r["last_message"] or "No messages",
+                "unread_count": r["unread_count"] or 0,
             }
             for r in rows
         ]
     except Exception as e:
         print(f"get_all_users error: {e}")
         return []
+    finally:
+        conn.close()
+
+
+def mark_read(phone, socketio=None):
+    """Persist that staff has read everything up to this user's latest
+    message. Called when a dashboard opens/selects a chat. Storing this
+    in the DB (instead of only in frontend React state) means the
+    unread badge survives the dashboard being closed and reopened, and
+    stays correct across multiple dashboard instances/tabs.
+    """
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            """UPDATE users
+               SET last_read_message_id = COALESCE(
+                   (SELECT MAX(id) FROM messages WHERE phone = ?), last_read_message_id
+               )
+               WHERE phone = ?""",
+            (phone, phone),
+        )
+        conn.commit()
+        if socketio:
+            # Let any OTHER connected dashboard tab/instance know this
+            # chat was read too, so unread badges stay in sync across
+            # multiple open dashboards, not just the one that read it.
+            socketio.emit("user_update", {"phone": phone, "unread_count": 0})
+        return True
+    except Exception as e:
+        print(f"mark_read error: {e}")
+        return False
     finally:
         conn.close()

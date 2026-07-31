@@ -86,7 +86,7 @@ export default function App() {
 
   const {
     messages, setMessages, loading, unreadCounts, highlightedUsers,
-    loadMessages, markAsRead, incrementUnread, appendMessage,
+    loadMessages, markAsRead, seedUnreadCounts, incrementUnread, appendMessage,
     updateMessageStatus, updateTempStatus, removeMessage, selectedPhoneRef,
   } = useMessages(selectedPhone);
 
@@ -259,6 +259,8 @@ export default function App() {
     setLatestBooking({ phone, name, mobile, best_time, at: Date.now() });
   }, [selectedPhoneRef]);
 
+  const hasConnectedOnceRef = useRef(false);
+
   const { connected } = useSocket({
     onNewUser: handleNewUser,
     onUserUpdate: handleUserUpdate,
@@ -281,6 +283,7 @@ export default function App() {
           api.getUsers(), api.getAnalytics(), api.getConsultations(),
         ]);
         setUsers(usersData);
+        seedUnreadCounts(usersData);
         setStats(statsData);
         const seen = getSeenConsults();
         setUnseenConsultPhones(new Set(consults.map((c) => c.phone).filter((p) => !seen.has(p))));
@@ -294,6 +297,26 @@ export default function App() {
     const id = setInterval(refreshAnalytics, 30000);
     return () => clearInterval(id);
   }, [refreshAnalytics]);
+
+  // Resync after a reconnect (socket dropped and came back while the
+  // dashboard stayed open) — any new_message events fired during that
+  // gap were missed entirely, so local unreadCounts state would
+  // silently fall behind. Refetching /users picks up the DB's real
+  // unread_count and catches it back up. Skips the very first connect,
+  // since the initial `load()` effect above already covers that case.
+  useEffect(() => {
+    if (!connected) return; // only react to transitions INTO connected
+    if (hasConnectedOnceRef.current) {
+      // Not the first connect — this is a reconnect after a drop, so
+      // resync in case any events (and thus unread increments) were
+      // missed during the gap.
+      api.getUsers().then((usersData) => {
+        setUsers(usersData);
+        seedUnreadCounts(usersData);
+      }).catch((e) => console.error("Reconnect resync failed:", e));
+    }
+    hasConnectedOnceRef.current = true;
+  }, [connected, seedUnreadCounts]);
 
   // ── User selection ────────────────────────────────────────────────────
 

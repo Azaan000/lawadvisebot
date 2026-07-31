@@ -30,6 +30,34 @@ export function useMessages(selectedPhone) {
       s.delete(phone);
       return s;
     });
+    // Persist to the backend too — unreadCounts here is just React
+    // state, so without this, anything the customer sent while the
+    // dashboard was closed (or before this tab loaded) would show as
+    // read locally but the server would still think it's unread the
+    // next time /users is fetched (new tab, refresh, restart).
+    api.markRead(phone).catch((e) => console.error("markRead:", e));
+  }, []);
+
+  // Seed unread counts from the server on initial load (or reconnect),
+  // since /users now returns each user's real unread_count computed
+  // from the DB — this is what actually surfaces messages that arrived
+  // while the dashboard was closed, which live socket events alone
+  // can never do.
+  const seedUnreadCounts = useCallback((usersData) => {
+    setUnreadCounts((prev) => {
+      const next = { ...prev };
+      for (const u of usersData) {
+        if (typeof u.unread_count === "number") next[u.phone] = u.unread_count;
+      }
+      return next;
+    });
+    setHighlightedUsers((prev) => {
+      const s = new Set(prev);
+      for (const u of usersData) {
+        if (u.unread_count > 0) s.add(u.phone);
+      }
+      return s;
+    });
   }, []);
 
   const incrementUnread = useCallback((phone) => {
@@ -103,6 +131,7 @@ export function useMessages(selectedPhone) {
     highlightedUsers,
     loadMessages,
     markAsRead,
+    seedUnreadCounts,
     incrementUnread,
     appendMessage,
     updateMessageStatus,

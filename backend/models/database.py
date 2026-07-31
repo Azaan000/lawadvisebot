@@ -28,7 +28,8 @@ def init_db():
             tags TEXT DEFAULT '',
             notes TEXT DEFAULT '',
             total_messages INTEGER DEFAULT 0,
-            last_message TEXT DEFAULT ''
+            last_message TEXT DEFAULT '',
+            last_read_message_id INTEGER DEFAULT 0
         )
     """)
 
@@ -65,6 +66,20 @@ def init_db():
         if "duplicate column name" not in str(e).lower():
             print(f"Migration warning: {e}")
 
+    # Track whether this column is being added for the very first time —
+    # the one-time backfill below must only run in that case. If it ran
+    # on every startup instead (matching on last_read_message_id == 0),
+    # it would keep resetting genuinely-unread conversations to "read"
+    # every time the server restarts, which is the exact bug this
+    # migration exists to fix, just from the other direction.
+    just_added_last_read_column = False
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN last_read_message_id INTEGER DEFAULT 0")
+        just_added_last_read_column = True
+    except sqlite3.OperationalError as e:
+        if "duplicate column name" not in str(e).lower():
+            print(f"Migration warning: {e}")
+
     # -----------------------------
     # Backfill last_message
     # -----------------------------
@@ -79,6 +94,17 @@ def init_db():
         )
         WHERE (last_message IS NULL OR last_message = '')
     """)
+
+    # -----------------------------
+    # Backfill last_read_message_id (one-time only, see comment above)
+    # -----------------------------
+    if just_added_last_read_column:
+        cursor.execute("""
+            UPDATE users
+            SET last_read_message_id = COALESCE(
+                (SELECT MAX(m.id) FROM messages m WHERE m.phone = users.phone), 0
+            )
+        """)
 
     # -----------------------------
     # Indexes

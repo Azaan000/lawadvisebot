@@ -8,7 +8,7 @@ from io import StringIO, BytesIO
 from flask import Blueprint, request, jsonify, send_file, current_app
 from werkzeug.utils import secure_filename
 
-from models.user import get_all_users, toggle_user_mode, update_user_meta
+from models.user import get_all_users, toggle_user_mode, update_user_meta, mark_read
 from models.message import save_message, get_messages, get_all_messages_for_export
 from models.database import get_db
 from bot.whatsapp_handler import send_text, send_media, resolve_media_type
@@ -52,6 +52,15 @@ def toggle(phone):
     if new_mode is None:
         return jsonify({"error": "User not found"}), 404
     return jsonify({"human_mode": new_mode})
+
+
+@chat_bp.route("/mark-read/<phone>", methods=["POST"])
+@require_auth
+def mark_read_route(phone):
+    ok = mark_read(phone, _socketio())
+    if not ok:
+        return jsonify({"error": "Failed to mark read"}), 500
+    return jsonify({"phone": phone, "unread_count": 0})
 
 
 @chat_bp.route("/update-user", methods=["POST"])

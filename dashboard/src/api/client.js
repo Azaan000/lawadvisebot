@@ -51,6 +51,9 @@ export const api = {
   toggleMode: (phone) =>
     request(`/toggle/${phone}`, { method: "POST" }),
 
+  markRead: (phone) =>
+    request(`/mark-read/${phone}`, { method: "POST" }),
+
   updateUser: (phone, tags, notes) =>
     request("/update-user", {
       method: "POST",
